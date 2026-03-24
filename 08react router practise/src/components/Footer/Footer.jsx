@@ -73,16 +73,20 @@ export default function Footer() {
                         <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Follow us</h2>
                             <ul className="text-gray-500 font-medium">
-                                <li className="mb-4">
-                                    <a
-                                        href="https://github.com/hiteshchoudhary"
-                                        className="hover:underline"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        Github
-                                    </a>
-                                </li>
+                                 <li>
+                                    <Link to="/Github" className="hover:underline">
+                                        </Link>
+                                <NavLink
+                                to="/Github"
+                                    className={({isActive}) => 
+                                        `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
+                                     ${isActive ? "text-orange-700" : "text-gray-700" }
+                                    hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                    }
+                                >
+                                    Github
+                                </NavLink>
+                            </li>
                                 <li>
                                     <Link to="/" className="hover:underline">
                                         Discord
