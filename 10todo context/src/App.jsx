@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { TodoContext } from './contexts/Todo context'
+import { useEffect, useState } from 'react'
+import { TodoProvider } from './contexts/Todo context'
 import TodoForm from './components/Todo Form/Todo Form'
 import TodoItem from './components/Todo Item/Todo Item'
 
 function App() {
   const [todos, setTodos] = useState([])
 
-  const addTodo = () =>{
-    setTodos((prev) => [...prev,{id: Date.now()}])
+  const addTodo = (msg) =>{
+    setTodos((prev) => [{id: Date.now(), msg:msg, completed:false}, ...prev])
   }
 
   const updateTodo = (id, msg) =>{
@@ -19,11 +19,24 @@ function App() {
   }
   
   const completeTodo = (id) =>{
-    setTodos((prev) => prev.map((todo) => todo.id === id ? {...todo, completed: !todo.completed0} : todo))
+    setTodos((prev) => prev.map((todo) => todo.id === id ? {...todo, completed: !todo.completed} : todo))
   }
 
+  useEffect(() => {
+    const saveData = JSON.parse(localStorage.getItem("todos"))
+
+    if (saveData && saveData.length > 0) {
+      setTodos(saveData)
+    }
+  }, [])
+
+  useEffect(() =>{
+    localStorage.setItem("todos", JSON.stringify(todos))
+  }, [todos])
+
+
   return (
-    <TodoContext value={{todos, addTodo, updateTodo, deleteTodo, completeTodo}}>
+    <TodoProvider value={{todos, addTodo, updateTodo, deleteTodo, completeTodo}}>
       <div className="bg-[#172842] min-h-screen py-8">
                 <div className="w-full max-w-2xl mx-auto shadow-md rounded-lg px-4 py-3 text-white">
                     <h1 className="text-2xl font-bold text-center mb-8 mt-2">Manage Your Todos</h1>
@@ -32,12 +45,16 @@ function App() {
                     </div>
                     <div className="flex flex-wrap gap-y-3">
                        {todos.map((todo) => (
-                        <TodoItem key={todo.id} todo={todo} />
-))}
+                          <div key={todo.id}
+                          className='w-full'
+                          >
+                            <TodoItem todo={todo} />
+                          </div>
+                        ))}
                     </div>
                 </div>
             </div>
-    </TodoContext>
+    </TodoProvider>
   )
 }
 

@@ -3,15 +3,18 @@ import useTodo from '../../contexts/Todo context'
 
 function TodoForm() {
     const [submitForm, setSubmitForm] = useState("")
-    const {addTodo} =useTodo()
+    const {addTodo, todos} =useTodo()
 
     const submit = (e) =>{
        e.preventDefault()
-       
-       addTodo(submitForm)
-       setSubmitForm("")
-    }
 
+       const trimmed = submitForm.trim()
+       if (!trimmed) return
+
+      addTodo(trimmed)
+      setSubmitForm("")
+    }
+    
     return (
         <form  className="flex" onSubmit={submit}>
             <input
