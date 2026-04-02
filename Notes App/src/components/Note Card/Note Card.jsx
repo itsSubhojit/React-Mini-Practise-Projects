@@ -1,15 +1,15 @@
 import React from 'react'
 import useNote from '../../contexts/Notes context';
 
-function NoteCard({note}) {
+function NoteCard({note, onEdit }) {
 
-    const {editNote, deleteNote} = useNote()
+    const {deleteNote} = useNote()
 
   return (
     <div className="backdrop-blur-lg bg-white/10 border border-white/20 p-5 rounded-2xl shadow-md mb-4 hover:scale-[1.02] transition">
       
       <h2 className="text-white font-bold text-lg mb-1">{note.title}</h2>
-      <p className="text-gray-300">{note.desc}</p>
+      <p className="text-gray-300">{note.description}</p>
 
       <div className="mt-4 flex gap-3">
         <button
