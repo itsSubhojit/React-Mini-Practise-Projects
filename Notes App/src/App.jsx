@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NoteProvider } from './contexts/Notes context'
 import AddNoteForm from './components/Add Note Form/Add Note Form'
 import EditNoteForm from './components/Edit Note Form/Edit Note Form'
@@ -11,6 +11,7 @@ function App() {
   const [editId, setEditId] = useState(null)
   const [title, setTitle] = useState("")
   const [desc, setDesc] = useState("")
+  const [isLoaded, setIsLoaded] = useState(false)
 
 
   const addNote = (title, description) =>{
@@ -29,10 +30,24 @@ function App() {
   const handleEdit = (note) =>{
     setEditId(note.id)
     setTitle(note.title)
-    setDesc(note.desc)
+    setDesc(note.description)
   }
 
+// LOAD
+useEffect(() => {
+  const data = JSON.parse(localStorage.getItem("note"))
+  if (data && Array.isArray(data)) {
+    setNote(data)
+  }
+  setIsLoaded(true)
+}, [])
 
+// SAVE (only after load)
+useEffect(() => {
+  if (isLoaded) {
+    localStorage.setItem("note", JSON.stringify(note))
+  }
+}, [note, isLoaded])
 
 
   return (
@@ -51,7 +66,7 @@ function App() {
          : 
          <AddNoteForm/>
          }
-         {note.map ((note) => (
+         {note?.map ((note) => (
           <NoteCard key={note.id} note={note} onEdit={handleEdit} />
          ))}
          
