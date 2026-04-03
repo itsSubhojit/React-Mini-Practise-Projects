@@ -3,6 +3,7 @@ import { NoteProvider } from './contexts/Notes context'
 import AddNoteForm from './components/Add Note Form/Add Note Form'
 import EditNoteForm from './components/Edit Note Form/Edit Note Form'
 import NoteCard from './components/Note Card/Note Card'
+import SearchBar from './components/Search/Search'
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
   const [title, setTitle] = useState("")
   const [desc, setDesc] = useState("")
   const [isLoaded, setIsLoaded] = useState(false)
+  const [search, setSearch] = useState("")
 
 
   const addNote = (title, description) =>{
@@ -26,6 +28,10 @@ function App() {
   const deleteNote = (id) => {
     setNote((prev)=> prev.filter((note)=> note.id !== id))
   }
+
+  const searchNote = note.filter((n)=>
+    n.title?.toLowerCase().includes(search.toLowerCase())
+  )
 
   const handleEdit = (note) =>{
     setEditId(note.id)
@@ -51,9 +57,10 @@ useEffect(() => {
 
 
   return (
-    <NoteProvider value={{addNote, editNote, deleteNote}}>
+    <NoteProvider value={{addNote, editNote, deleteNote, searchNote}}>
       <div className="p-5 max-w-xl mx-auto">
-         
+         <SearchBar search={search} setSearch={setSearch}/>
+
          {editId ? 
          <EditNoteForm
          title={title}
@@ -66,9 +73,13 @@ useEffect(() => {
          : 
          <AddNoteForm/>
          }
-         {note?.map ((note) => (
-          <NoteCard key={note.id} note={note} onEdit={handleEdit} />
-         ))}
+         
+         {searchNote.length > 0 ?
+         searchNote.map((note) => (
+            <NoteCard key={note.id} note={note} onEdit={handleEdit} />
+         ))  :
+            <p className="text-red-600 text-center">No records found</p>
+         }
          
       </div>
     </NoteProvider>

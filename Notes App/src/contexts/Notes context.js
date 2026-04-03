@@ -9,7 +9,8 @@ export const NoteContext = createContext({
 
     addNote: (id, title, description) =>{},
     editNote: (id, title, description) =>{},
-    deleteNote: (id) =>{}
+    deleteNote: (id) =>{},
+    searchNote: (title) =>{}
 })
 
 export const NoteProvider = NoteContext.Provider
